@@ -1,0 +1,23 @@
+{
+	"name": "node-twitter-api",
+	"version": "0.0.1",
+	"description": "Simple module for using Twitter's API in node.js",
+	"keywords": ["twitter","oauth"],
+	"homepage": "https://github.com/renner96/node-twitter",
+	"author": "René Raab (renner96)",
+	"licenses": {
+		"type": "MIT",
+		"url": "https://raw.github.com/renner96/node-twitter/master/LICENSE"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/renner96/node-twitter.git"
+	},
+	"dependencies": {
+		"oauth": ">=0.8.4"
+	},
+	"engines": {
+		"node": ">=0.4.0"
+	},
+	"main": "./twitter"
+}
