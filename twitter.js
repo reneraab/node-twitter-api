@@ -1,4 +1,5 @@
-var VERSION = '0.0.1',
+var VERSION = '0.0.2',
+	querystring = require('querystring'),
 	oauth = require('oauth');
 
 
@@ -37,12 +38,52 @@ Twitter.prototype.getAccessToken = function(requestToken, requestTokenSecret, oa
 	});
 }
 
-Twitter.prototype.verifyCredentials = function (accessToken, accessTokenSecret, callback) {
+Twitter.prototype.verifyCredentials = function(accessToken, accessTokenSecret, callback) {
 	this.oa.get("https://api.twitter.com/1.1/account/verify_credentials.json", accessToken, accessTokenSecret, function (error, data, response) {
 		if (error) {
 			callback(error);
 		} else {
-			callback(null, JSON.parse(data), null);
+			callback(null, JSON.parse(data));
+		}	
+	});	
+}
+
+
+// TIMELINES
+Twitter.prototype.getTimeline = function(type, params, accessToken, accessTokenSecret, callback) {
+	type = type.toLowerCase();
+
+	var url;
+	switch(type) {
+		case "home_timeline":
+		case "home":
+			url = "home_timeline";
+			break;
+		case "mentions_timeline":
+		case "mentions":
+			url = "mentions_timeline";
+			break;
+		case "user_timeline":
+		case "user":
+			if (params.user_id || params.screen_name) {
+				callback("Always specify either an user_id or screen_name when requesting a user timeline.");
+				return false;
+			}
+			url = "user_timeline";
+			break;
+		case "retweets_of_me":
+		case "retweets":
+			url = "retweets_of_me";
+			break;
+		default:
+			callback("Please specify an existing type.");
+	}
+
+	this.oa.get("https://api.twitter.com/1.1/statuses/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+		if (error) {
+			callback(error);
+		} else {
+			callback(null, JSON.parse(data));
 		}	
 	});	
 }
