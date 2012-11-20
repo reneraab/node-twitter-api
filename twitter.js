@@ -65,7 +65,7 @@ Twitter.prototype.getTimeline = function(type, params, accessToken, accessTokenS
 			break;
 		case "user_timeline":
 		case "user":
-			if (params.user_id || params.screen_name) {
+			if (!params.user_id || !params.screen_name) {
 				callback("Always specify either an user_id or screen_name when requesting a user timeline.");
 				return false;
 			}
