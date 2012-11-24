@@ -88,4 +88,58 @@ Twitter.prototype.getTimeline = function(type, params, accessToken, accessTokenS
 	});	
 }
 
+//STREAMING
+Twitter.prototype.getStream = function(type, params, accessToken, accessTokenSecret, dataCallback, endCallback) {
+	type = type.toLowerCase();
+
+	var url, method = "GET";
+	switch(type) {
+		case "userstream":
+		case "user":
+			url = "https://userstream.twitter.com/1.1/user.json";
+			break;
+		case "sitestream":
+		case "site":
+			url = "https://sitestream.twitter.com/1.1/site.json";
+			break;
+		case "sample":
+			url = "https://stream.twitter.com/1.1/statuses/sample.json";
+			break;
+		case "firehose":
+			url = "https://stream.twitter.com/1.1/statuses/firehose.json";
+			break;
+		case "filter":
+			method = "POST";
+			url = "https://stream.twitter.com/1.1/statuses/filter.json";
+			break;
+		default:
+			callback("Please specify an existing type.");
+	}
+
+	var req;
+	if (method == "GET") {
+		req = this.oa.get(url + "?" + querystring.stringify(params), accessToken, accessTokenSecret);
+	} else {
+		req = this.oa.post(url, accessToken, accessTokenSecret, params, null);
+	}
+	req.addListener('response', function (res) {
+		res.setEncoding('utf-8');
+		res.addListener('data', function (chunk) {
+			try {
+				if (chunk == "") {
+					dataCallback(null, {}, chunk);
+				} else {
+					dataCallback(null, JSON.parse(chunk), chunk);
+				}
+			} catch (e) {
+				dataCallback({ message: "Error while parsing Twitter-Response.", error: e }, null, chunk);
+			}
+		});
+		res.addListener('end', function() {
+			endCallback();
+		});
+	});
+	req.end();
+}
+
 module.exports = Twitter;
