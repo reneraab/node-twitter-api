@@ -1,4 +1,4 @@
-var VERSION = '0.0.2',
+var VERSION = '0.0.3.1',
 	querystring = require('querystring'),
 	oauth = require('oauth');
 
@@ -127,12 +127,12 @@ Twitter.prototype.getStream = function(type, params, accessToken, accessTokenSec
 		res.addListener('data', function (chunk) {
 			try {
 				if (chunk == "") {
-					dataCallback(null, {}, chunk);
+					dataCallback(null, {}, chunk, res);
 				} else {
-					dataCallback(null, JSON.parse(chunk), chunk);
+					dataCallback(null, JSON.parse(chunk), chunk, res);
 				}
 			} catch (e) {
-				dataCallback({ message: "Error while parsing Twitter-Response.", error: e }, null, chunk);
+				dataCallback({ message: "Error while parsing Twitter-Response.", error: e }, null, chunk, res);
 			}
 		});
 		res.addListener('end', function() {
