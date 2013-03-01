@@ -1,4 +1,4 @@
-var VERSION = '0.0.3.1',
+var VERSION = '0.0.4',
 	querystring = require('querystring'),
 	oauth = require('oauth');
 
@@ -140,6 +140,96 @@ Twitter.prototype.getStream = function(type, params, accessToken, accessTokenSec
 		});
 	});
 	req.end();
+}
+
+// TWEETS
+Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecret, callback) {
+	type = type.toLowerCase();
+
+	var url, method;
+	switch(type) {
+		case "destroy":
+			url = "destroy/"+params.id;
+			delete params.id;
+			method = "POST";
+			break;
+		case "update":
+			url = "update";
+			method = "POST";
+			break;
+		case "show":
+			url = "show/"+params.id;
+			delete params.id;
+			method = "GET";
+			break;
+		case "retweet":
+			url = "retweet/"+params.id;
+			delete params.id;
+			method = "POST";
+			break;
+		default:
+			callback("Please specify an existing type.");
+	}
+
+	if (method == "GET") {
+		this.oa.get("https://api.twitter.com/1.1/statuses/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+			if (error) {
+				callback(error, response);
+			} else {
+				callback(null, JSON.parse(data), response);
+			}	
+		});
+	} else {
+		this.oa.post("https://api.twitter.com/1.1/statuses/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
+			if (error) {
+				callback(error, response);
+			} else {
+				callback(null, JSON.parse(data), response);
+			}	
+		});
+	}
+}
+
+Twitter.prototype.retweet = function(params, accessToken, accessTokenSecret, callback) {
+	this.oa.post("https://api.twitter.com/1.1/statuses/retweet/" + params.id + ".json", accessToken, accessTokenSecret, {}, function (error, data, response) {
+		if (error) {
+			callback(error, response);
+		} else {
+		
+			callback(null, JSON.parse(data), response);
+		}	
+	});
+}
+
+Twitter.prototype.undo_retweet = function(params, accessToken, accessTokenSecret, callback) {
+	this.oa.post("https://api.twitter.com/1.1/statuses/destroy/" + params.id + ".json", accessToken, accessTokenSecret, {}, function (error, data, response) {
+		if (error) {
+			callback(error, response);
+		} else {
+		
+			callback(null, JSON.parse(data), response);
+		}	
+	});
+}
+
+Twitter.prototype.favorite = function(params, accessToken, accessTokenSecret, callback) {
+	this.oa.post("https://api.twitter.com/1.1/favorites/create.json", accessToken, accessTokenSecret, params, function (error, data, response) {
+		if (error) {
+			callback(error, response);
+		} else {
+			callback(null, JSON.parse(data), response);
+		}	
+	});
+}
+
+Twitter.prototype.undo_favorite = function(params, accessToken, accessTokenSecret, callback) {
+	this.oa.post("https://api.twitter.com/1.1/favorites/destroy.json", accessToken, accessTokenSecret, params, function (error, data, response) {
+		if (error) {
+			callback(error, response);
+		} else {
+			callback(null, JSON.parse(data), response);
+		}	
+	});
 }
 
 module.exports = Twitter;
