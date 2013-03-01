@@ -3,15 +3,15 @@
 	"version": "0.0.4",
 	"description": "Simple module for using Twitter's API in node.js",
 	"keywords": ["twitter","oauth","rest","streaming"],
-	"homepage": "https://github.com/renner96/node-twitter",
+	"homepage": "https://github.com/renner96/node-twitter-api",
 	"author": "René Raab (renner96)",
 	"licenses": {
 		"type": "MIT",
-		"url": "https://raw.github.com/renner96/node-twitter/master/LICENSE"
+		"url": "https://raw.github.com/renner96/node-twitter-api/master/LICENSE"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/renner96/node-twitter.git"
+		"url": "https://github.com/renner96/node-twitter-api.git"
 	},
 	"dependencies": {
 		"oauth": ">=0.8.4"
