@@ -77,6 +77,7 @@ Twitter.prototype.getTimeline = function(type, params, accessToken, accessTokenS
 			break;
 		default:
 			callback("Please specify an existing type.");
+			return false;
 	}
 
 	this.oa.get("https://api.twitter.com/1.1/statuses/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
@@ -169,6 +170,7 @@ Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecr
 			break;
 		default:
 			callback("Please specify an existing type.");
+			return false;
 	}
 
 	if (method == "GET") {
