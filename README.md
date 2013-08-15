@@ -63,3 +63,33 @@ twitter.verifyCredentials(accessToken, accessTokenSecret, function(error, data, 
 	}
 });
 ```
+
+## Methods ##
+(Allmost) all function names replicate the endpoints of the Twitter API 1.1.
+If you want to post a status e. g. - which is done by posting data to statuses/update - you can just do the following:
+```javascript
+twitter.statuses("update", {
+		status: "Hello world!"
+	},
+	accessToken,
+	accessTokenSecret,
+	function(error, data, response) {
+		if (error) {
+			// something went wrong
+		} else {
+			// data contains the data sent by twitter
+		}
+	}
+);
+```
+
+Most of the functions use the scheme:
+`twitter.[namespace]([type], [params], [accessToken], [accessTokenSecret], [callback]);`
+* _namespace_ is the word before the slash (e.g. "statuses", "search", "direct_messages" etc.)
+* _type_ is the word after the slash (e.g. "create", "update", "show" etc.)
+* _params_ is an object containing the parameters you want to give to twitter (refer to the Twitter API Documentation for more information)
+* _accessToken_ and _accessTokenSecret_ are the token and secret of the authenticated user
+* _callback_ is a function with the parameters _error_ (either null or an error object), _data_ (data object) and _response_ (unprocessed response from Twitter)
+
+For Timelines you can also use the function _getTimeline_ instead of _statuses_ and use shorter types ("user" instead of "user_timeline").
+For Streams you must use _getStream_ which has two instead of just one callback: a dataCallback and an endCallback. (c.f. data and end events of node's http response)
