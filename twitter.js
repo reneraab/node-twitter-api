@@ -143,6 +143,8 @@ Twitter.prototype.getStream = function(type, params, accessToken, accessTokenSec
 		});
 	});
 	req.end();
+
+	return req;
 }
 
 // Tweets
