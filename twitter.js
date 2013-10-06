@@ -255,7 +255,7 @@ Twitter.prototype.friends = function(type, params, accessToken, accessTokenSecre
 };
 
 // Followers (similiar to Friends)
-Twitter.prototype.friends = function(type, params, accessToken, accessTokenSecret, callback) {
+Twitter.prototype.followers = function(type, params, accessToken, accessTokenSecret, callback) {
 	var url = type.toLowerCase(); // ids or list
 
 	this.oa.get(baseUrl + "followers/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
