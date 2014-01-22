@@ -665,9 +665,9 @@ Twitter.prototype.help = function(type, params, accessToken, accessTokenSecret, 
 
 // Rate Limit Status
 Twitter.prototype.rateLimitStatus = function(params, accessToken, accessTokenSecret, callback) {
-	this.oa.get(baseUrl + "applications/rate_limit_status.json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+	this.oa.get(baseUrl + "application/rate_limit_status.json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
 		if (error) {
-			callback(error, response, baseUrl + "applications/rate_limit_status.json?" + querystring.stringify(params));
+			callback(error, response, baseUrl + "application/rate_limit_status.json?" + querystring.stringify(params));
 		} else {
 			callback(null, JSON.parse(data), response);
 		}	
