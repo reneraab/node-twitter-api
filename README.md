@@ -3,8 +3,6 @@
 
 Simple module for using Twitter's API in node.js
 
-## Wiki Links ##
-[ToDo-List](https://github.com/renner96/node-twitter/wiki/ToDo)
 
 ## Installation ##
 
