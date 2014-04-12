@@ -125,17 +125,27 @@ Twitter.prototype.getStream = function(type, params, accessToken, accessTokenSec
 	} else {
 		req = this.oa.post(url, accessToken, accessTokenSecret, params, null);
 	}
+	var msg = [];
 	req.addListener('response', function (res) {
 		res.setEncoding('utf-8');
 		res.addListener('data', function (chunk) {
-			try {
-				if (chunk == "\n") {
-					dataCallback(null, {}, chunk, res);
-				} else {
-					dataCallback(null, JSON.parse(chunk), chunk, res);
+			if (chunk == "\r\n") {
+				dataCallback(null, {}, chunk, res);
+				return;
+			} else if (chunk.substr(chunk.length - 2) == '\r\n') {
+				msg.push(chunk.substr(0, chunk.length -2));
+				var ret = msg.join("");
+				msg = [];
+
+				try {
+					dataCallback(null, JSON.parse(ret), ret, res);
+				} catch (e) {
+					dataCallback({ message: "Error while parsing Twitter-Response.", error: e }, null, chunk, res);
 				}
-			} catch (e) {
-				dataCallback({ message: "Error while parsing Twitter-Response.", error: e }, null, chunk, res);
+			return;
+			} else {
+				msg.push(chunk);
+				return;
 			}
 		});
 		res.addListener('end', function() {
