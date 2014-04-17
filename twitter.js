@@ -1,6 +1,6 @@
-var VERSION = '1.1.4',
-	querystring = require('querystring'),
-	oauth = require('oauth');
+var VERSION = "1.1.4",
+	querystring = require("querystring"),
+	oauth = require("oauth");
 
 var baseUrl = "https://api.twitter.com/1.1/";
 
@@ -126,13 +126,13 @@ Twitter.prototype.getStream = function(type, params, accessToken, accessTokenSec
 		req = this.oa.post(url, accessToken, accessTokenSecret, params, null);
 	}
 	var msg = [];
-	req.addListener('response', function (res) {
-		res.setEncoding('utf-8');
-		res.addListener('data', function (chunk) {
+	req.addListener("response", function (res) {
+		res.setEncoding("utf-8");
+		res.addListener("data", function (chunk) {
 			if (chunk == "\r\n") {
 				dataCallback(null, {}, chunk, res);
 				return;
-			} else if (chunk.substr(chunk.length - 2) == '\r\n') {
+			} else if (chunk.substr(chunk.length - 2) == "\r\n") {
 				msg.push(chunk.substr(0, chunk.length -2));
 				var ret = msg.join("");
 				msg = [];
@@ -148,7 +148,7 @@ Twitter.prototype.getStream = function(type, params, accessToken, accessTokenSec
 				return;
 			}
 		});
-		res.addListener('end', function() {
+		res.addListener("end", function() {
 			endCallback();
 		});
 	});
