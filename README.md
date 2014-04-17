@@ -91,3 +91,18 @@ Most of the functions use the scheme:
 
 For Timelines you can also use the function _getTimeline_ instead of _statuses_ and use shorter types ("user" instead of "user_timeline").
 For Streams you must use _getStream_ which has two instead of just one callback: a dataCallback and an endCallback. (c.f. data and end events of node's http response)
+
+## Use of update_with_media ##
+To send media alongside a tweet you just call the method as specified before. Please note, that you have to specify the parameters slightly different than proposed by the Twitter API documentation:
+```javascript
+{
+	media: [
+		"path_to_file1",
+		"path_to_file2",
+		stream
+	],
+	status: "Hello World"
+},
+```
+Instead of specifing "media[]", you use a real array. The given paths will then be read and posted to the Twitter API. You can also use a Readable Stream (http://nodejs.org/api/fs.html#fs_fs_createreadstream_path_options) instead of a Path.
+Please not that Twitter only allows one image at the moment (the last one specified will be used).
