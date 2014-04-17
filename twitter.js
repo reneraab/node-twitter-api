@@ -1,6 +1,8 @@
-var VERSION = "1.1.4",
+var VERSION = "1.2.0",
 	querystring = require("querystring"),
-	oauth = require("oauth");
+	oauth = require("oauth"),
+	request = require("request"),
+	fs = require("fs");
 
 var baseUrl = "https://api.twitter.com/1.1/";
 
@@ -185,8 +187,8 @@ Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecr
 			method = "POST";
 			break;
 		case "update_with_media":
-			method = "POST";
-			break;
+			this.updateWithMedia(params, accessToken, accessTokenSecret, callback);
+			return;
 		default:
 			callback("Please specify an existing type.");
 			return false;
@@ -210,6 +212,46 @@ Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecr
 		});
 	}
 }
+
+Twitter.prototype.updateWithMedia = function(params, accessToken, accessTokenSecret, callback) {
+	var r = request.post({
+		url: baseUrl + "statuses/update_with_media.json",
+		oauth: {
+			consumer_key: this.consumerKey,
+			consumer_secret: this.consumerSecret,
+			token: accessToken,
+			token_secret: accessTokenSecret
+		}
+	}, function(error, response, body) {
+		if (error) {
+			callback(error, response, baseUrl + "search/tweets.json?" + querystring.stringify(params));
+		} else {
+			callback(null, JSON.parse(body), response);
+		}
+	});
+	
+	// multipart/form-data
+	var form = r.form();
+	for (var key in params) {
+		console.log(key);
+		if (key != "media") {
+			form.append(key, params[key]);
+		}
+	}
+	
+	// append the media array
+	var media = params["media"];
+	for (var i = 0; i < media.length; i++) {
+		// if the content of media[i] is an existing path, create a ReadStream, otherwise just append the content
+		if (fs.existsSync(media[i])) {
+			console.log(media[i] + " exists.");
+			form.append("media[]", fs.createReadStream(media[i]));
+		} else {
+			form.append("media[]", media[i]);
+		}		
+	}
+}
+
 
 // Search
 Twitter.prototype.search = function(params, accessToken, accessTokenSecret, callback) {
