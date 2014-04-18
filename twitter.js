@@ -25,7 +25,7 @@ Twitter.prototype.getRequestToken = function(callback) {
 	this.oa.getOAuthRequestToken(function(error, oauthToken, oauthTokenSecret, results){
 		if (error) {
 			callback(error);
-		} else {  
+		} else {
 			callback(null, oauthToken, oauthTokenSecret, results);
 		}
 	});
@@ -47,8 +47,8 @@ Twitter.prototype.verifyCredentials = function(accessToken, accessTokenSecret, c
 			callback(error);
 		} else {
 			callback(null, JSON.parse(data));
-		}	
-	});	
+		}
+	});
 }
 
 
@@ -88,8 +88,8 @@ Twitter.prototype.getTimeline = function(type, params, accessToken, accessTokenS
 			callback(error);
 		} else {
 			callback(null, JSON.parse(data));
-		}	
-	});	
+		}
+	});
 }
 
 //Streaming
@@ -200,7 +200,7 @@ Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecr
 				callback(error, response, baseUrl + "statuses/" + url + ".json?" + querystring.stringify(params));
 			} else {
 				callback(null, JSON.parse(data), response);
-			}	
+			}
 		});
 	} else {
 		this.oa.post(baseUrl + "statuses/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
@@ -208,7 +208,7 @@ Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecr
 				callback(error, response);
 			} else {
 				callback(null, JSON.parse(data), response);
-			}	
+			}
 		});
 	}
 }
@@ -229,26 +229,24 @@ Twitter.prototype.updateWithMedia = function(params, accessToken, accessTokenSec
 			callback(null, JSON.parse(body), response);
 		}
 	});
-	
+
 	// multipart/form-data
 	var form = r.form();
 	for (var key in params) {
-		console.log(key);
 		if (key != "media") {
 			form.append(key, params[key]);
 		}
 	}
-	
+
 	// append the media array
 	var media = params["media"];
 	for (var i = 0; i < media.length; i++) {
 		// if the content of media[i] is an existing path, create a ReadStream, otherwise just append the content
 		if (fs.existsSync(media[i])) {
-			console.log(media[i] + " exists.");
 			form.append("media[]", fs.createReadStream(media[i]));
 		} else {
 			form.append("media[]", media[i]);
-		}		
+		}
 	}
 }
 
@@ -260,7 +258,7 @@ Twitter.prototype.search = function(params, accessToken, accessTokenSecret, call
 			callback(error, response, baseUrl + "search/tweets.json?" + querystring.stringify(params));
 		} else {
 			callback(null, JSON.parse(data), response);
-		}	
+		}
 	});
 };
 
@@ -278,7 +276,7 @@ Twitter.prototype.users = function(type, params, accessToken, accessTokenSecret,
 				callback(error, response, baseUrl + "users/" + url + ".json?" + querystring.stringify(params));
 			} else {
 				callback(null, JSON.parse(data), response);
-			}	
+			}
 		});
 	} else {
 		this.oa.post(baseUrl + "users/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
@@ -302,7 +300,7 @@ Twitter.prototype.friends = function(type, params, accessToken, accessTokenSecre
 			callback(error, response, baseUrl + "friends/" + url + ".json?" + querystring.stringify(params));
 		} else {
 			callback(null, JSON.parse(data), response);
-		}	
+		}
 	});
 };
 
@@ -315,7 +313,7 @@ Twitter.prototype.followers = function(type, params, accessToken, accessTokenSec
 			callback(error, response, baseUrl + "folllowers/" + url + ".json?" + querystring.stringify(params));
 		} else {
 			callback(null, JSON.parse(data), response);
-		}	
+		}
 	});
 };
 
@@ -339,7 +337,7 @@ Twitter.prototype.friendships = function(type, params, accessToken, accessTokenS
 				callback(error, response, baseUrl + "friendships/" + url + ".json?" + querystring.stringify(params));
 			} else {
 				callback(null, JSON.parse(data), response);
-			}	
+			}
 		});
 	} else {
 		this.oa.post(baseUrl + "friendships/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
@@ -351,6 +349,38 @@ Twitter.prototype.friendships = function(type, params, accessToken, accessTokenS
 		});
 	}
 };
+
+Twitter.prototype.updateProfileImage = function(params, accessToken, accessTokenSecret, callback) {
+
+	if (!fs.existsSync(params["image"])) throw new Error("no image");
+
+	var r = request.post({
+		url: baseUrl + "account/update_profile_image.json",
+		oauth: {
+			consumer_key: this.consumerKey,
+			consumer_secret: this.consumerSecret,
+			token: accessToken,
+			token_secret: accessTokenSecret
+		}
+	}, function(error, response, body) {
+		if (error) {
+			callback(error, response, baseUrl + "search/tweets.json?" + querystring.stringify(params));
+		} else {
+			callback(null, JSON.parse(body), response);
+		}
+	});
+
+	// multipart/form-data
+	var form = r.form();
+	for (var key in params) {
+		if (key != "image") {
+			form.append(key, params[key]);
+		}
+	}
+
+	form.append("image", fs.createReadStream(params["image"]));
+
+}
 
 // Account
 Twitter.prototype.account = function(type, params, accessToken, accessTokenSecret, callback) {
@@ -366,6 +396,9 @@ Twitter.prototype.account = function(type, params, accessToken, accessTokenSecre
 		case "verify_credentials":
 			method = "GET";
 			break;
+		case "update_profile_image":
+			this.updateProfileImage(params, accessToken, accessTokenSecret, callback);
+			break;
 	}
 
 	if (method == "GET") {
@@ -374,7 +407,7 @@ Twitter.prototype.account = function(type, params, accessToken, accessTokenSecre
 				callback(error, response, baseUrl + "account/" + url + ".json?" + querystring.stringify(params));
 			} else {
 				callback(null, JSON.parse(data), response);
-			}	
+			}
 		});
 	} else {
 		this.oa.post(baseUrl + "account/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
@@ -405,7 +438,7 @@ Twitter.prototype.blocks = function(type, params, accessToken, accessTokenSecret
 				callback(error, response, baseUrl + "blocks/" + url + ".json?" + querystring.stringify(params));
 			} else {
 				callback(null, JSON.parse(data), response);
-			}	
+			}
 		});
 	} else {
 		this.oa.post(baseUrl + "blocks/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
@@ -427,7 +460,7 @@ Twitter.prototype.users = function(type, params, accessToken, accessTokenSecret,
 			callback(error, response, baseUrl + "users/" + url + ".json?" + querystring.stringify(params));
 		} else {
 			callback(null, JSON.parse(data), response);
-		}	
+		}
 	});
 };
 
@@ -456,7 +489,7 @@ Twitter.prototype.suggestions = function(type, params, accessToken, accessTokenS
 			callback(error, response, baseUrl + "users/suggestions" + ((url) ? "/" + url : "") + ".json?" + querystring.stringify(params));
 		} else {
 			callback(null, JSON.parse(data), response);
-		}	
+		}
 	});
 };
 
@@ -477,7 +510,7 @@ Twitter.prototype.favorites = function(type, params, accessToken, accessTokenSec
 				callback(error, response, baseUrl + "favorites/" + url + ".json?" + querystring.stringify(params));
 			} else {
 				callback(null, JSON.parse(data), response);
-			}	
+			}
 		});
 	} else {
 		this.oa.post(baseUrl + "favorites/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
@@ -512,7 +545,7 @@ Twitter.prototype.direct_messages = function(type, params, accessToken, accessTo
 				callback(error, response, baseUrl + "direct_messages" + ((url) ? "/" + url : "") + ".json?" + querystring.stringify(params));
 			} else {
 				callback(null, JSON.parse(data), response);
-			}	
+			}
 		});
 	} else {
 		this.oa.post(baseUrl + "direct_messages/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
@@ -536,7 +569,7 @@ Twitter.prototype.lists = function(type, params, accessToken, accessTokenSecret,
 		case "members/create":
 		case "members/create_all":
 		case "subscribers/create":
-		case "subscribers/destroy":	
+		case "subscribers/destroy":
 		case "destroy":
 		case "update":
 		case "create":
@@ -549,7 +582,7 @@ Twitter.prototype.lists = function(type, params, accessToken, accessTokenSecret,
 				callback(error, response, baseUrl + "lists/" + url + ".json?" + querystring.stringify(params));
 			} else {
 				callback(null, JSON.parse(data), response);
-			}	
+			}
 		});
 	} else {
 		this.oa.post(baseUrl + "lists/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
@@ -576,7 +609,7 @@ Twitter.prototype.savedSearches = function(type, params, accessToken, accessToke
 			url = "show/" + params.id;
 			delete params.id;
 			break;
-		case "destroy": 
+		case "destroy":
 			url = "destroy/" + params.id;
 			delete params.id;
 			method = "POST";
@@ -589,7 +622,7 @@ Twitter.prototype.savedSearches = function(type, params, accessToken, accessToke
 				callback(error, response, baseUrl + "saved_searches/" + url + ".json?" + querystring.stringify(params));
 			} else {
 				callback(null, JSON.parse(data), response);
-			}	
+			}
 		});
 	} else {
 		this.oa.post(baseUrl + "saved_searches/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
@@ -623,7 +656,7 @@ Twitter.prototype.geo = function(type, params, accessToken, accessTokenSecret, c
 				callback(error, response, baseUrl + "geo/" + url + ".json?" + querystring.stringify(params));
 			} else {
 				callback(null, JSON.parse(data), response);
-			}	
+			}
 		});
 	} else {
 		this.oa.post(baseUrl + "geo/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
@@ -645,7 +678,7 @@ Twitter.prototype.trends = function(type, params, accessToken, accessTokenSecret
 			callback(error, response, baseUrl + "trends/" + url + ".json?" + querystring.stringify(params));
 		} else {
 			callback(null, JSON.parse(data), response);
-		}	
+		}
 	});
 };
 
@@ -689,7 +722,7 @@ Twitter.prototype.oauth = function(type, params, accessToken, accessTokenSecret,
 				callback(error, response, baseUrl + "geo/" + url + ".json?" + querystring.stringify(params));
 			} else {
 				callback(null, JSON.parse(data), response);
-			}	
+			}
 		});
 	} else {
 		this.oa.post(baseUrl + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
@@ -711,7 +744,7 @@ Twitter.prototype.help = function(type, params, accessToken, accessTokenSecret, 
 			callback(error, response, baseUrl + "help/" + url + ".json?" + querystring.stringify(params));
 		} else {
 			callback(null, JSON.parse(data), response);
-		}	
+		}
 	});
 };
 
@@ -722,7 +755,7 @@ Twitter.prototype.rateLimitStatus = function(params, accessToken, accessTokenSec
 			callback(error, response, baseUrl + "application/rate_limit_status.json?" + querystring.stringify(params));
 		} else {
 			callback(null, JSON.parse(data), response);
-		}	
+		}
 	});
 };
 
