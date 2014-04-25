@@ -1,4 +1,4 @@
-var VERSION = "1.2.0",
+var VERSION = "1.2.1",
 	querystring = require("querystring"),
 	oauth = require("oauth"),
 	request = require("request"),
