@@ -173,6 +173,10 @@ Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecr
 			url = "show/"+params.id;
 			delete params.id;
 			break;
+		case "lookup":
+			url = "lookup";
+			method = "POST";
+			break;
 		case "destroy":
 			url = "destroy/"+params.id;
 			delete params.id;
