@@ -138,13 +138,16 @@ Twitter.prototype.getStream = function(type, params, accessToken, accessTokenSec
 				msg.push(chunk.substr(0, chunk.length -2));
 				var ret = msg.join("");
 				msg = [];
-
+				
+				var parsedRet;
 				try {
-					dataCallback(null, JSON.parse(ret), ret, res);
+					parsedRet = JSON.parse(ret);
 				} catch (e) {
 					dataCallback({ message: "Error while parsing Twitter-Response.", error: e }, null, chunk, res);
+					return;
 				}
-			return;
+				dataCallback(null, parsedRet, ret, res);
+				return;
 			} else {
 				msg.push(chunk);
 				return;
