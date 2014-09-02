@@ -405,7 +405,7 @@ Twitter.prototype.account = function(type, params, accessToken, accessTokenSecre
 			break;
 		case "update_profile_image":
 			this.updateProfileImage(params, accessToken, accessTokenSecret, callback);
-			break;
+			return;
 	}
 
 	if (method == "GET") {
