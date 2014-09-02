@@ -231,7 +231,7 @@ Twitter.prototype.updateWithMedia = function(params, accessToken, accessTokenSec
 		}
 	}, function(error, response, body) {
 		if (error) {
-			callback(error, response, baseUrl + "search/tweets.json?" + querystring.stringify(params));
+			callback(error, response, baseUrl + "statuses/update_with_media.json?" + querystring.stringify(params));
 		} else {
 			callback(null, JSON.parse(body), response);
 		}
@@ -371,7 +371,7 @@ Twitter.prototype.updateProfileImage = function(params, accessToken, accessToken
 		}
 	}, function(error, response, body) {
 		if (error) {
-			callback(error, response, baseUrl + "search/tweets.json?" + querystring.stringify(params));
+			callback(error, response, baseUrl + "account/update_profile_image.json?" + querystring.stringify(params));
 		} else {
 			callback(null, JSON.parse(body), response);
 		}
