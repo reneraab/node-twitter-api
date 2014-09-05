@@ -22,7 +22,7 @@ var Twitter = function(options) {
 Twitter.VERSION = VERSION;
 
 Twitter.prototype.getRequestToken = function(callback) {
-	this.oa.getOAuthRequestToken(function(error, oauthToken, oauthTokenSecret, results){
+	this.oa.getOAuthRequestToken(function(error, oauthToken, oauthTokenSecret, results) {
 		if (error) {
 			callback(error);
 		} else {
@@ -42,7 +42,7 @@ Twitter.prototype.getAccessToken = function(requestToken, requestTokenSecret, oa
 }
 
 Twitter.prototype.verifyCredentials = function(accessToken, accessTokenSecret, callback) {
-	this.oa.get(baseUrl + "account/verify_credentials.json", accessToken, accessTokenSecret, function (error, data, response) {
+	this.oa.get(baseUrl + "account/verify_credentials.json", accessToken, accessTokenSecret, function(error, data, response) {
 		if (error) {
 			callback(error);
 		} else {
@@ -57,7 +57,7 @@ Twitter.prototype.getTimeline = function(type, params, accessToken, accessTokenS
 	type = type.toLowerCase();
 
 	var url;
-	switch(type) {
+	switch (type) {
 		case "home_timeline":
 		case "home":
 			url = "home_timeline";
@@ -83,7 +83,7 @@ Twitter.prototype.getTimeline = function(type, params, accessToken, accessTokenS
 			return false;
 	}
 
-	this.oa.get(baseUrl + "statuses/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+	this.oa.get(baseUrl + "statuses/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 		if (error) {
 			callback(error);
 		} else {
@@ -97,7 +97,7 @@ Twitter.prototype.getStream = function(type, params, accessToken, accessTokenSec
 	type = type.toLowerCase();
 
 	var url, method = "GET";
-	switch(type) {
+	switch (type) {
 		case "userstream":
 		case "user":
 			url = "https://userstream.twitter.com/1.1/user.json";
@@ -128,22 +128,25 @@ Twitter.prototype.getStream = function(type, params, accessToken, accessTokenSec
 		req = this.oa.post(url, accessToken, accessTokenSecret, params, null);
 	}
 	var msg = [];
-	req.addListener("response", function (res) {
+	req.addListener("response", function(res) {
 		res.setEncoding("utf-8");
-		res.addListener("data", function (chunk) {
+		res.addListener("data", function(chunk) {
 			if (chunk == "\r\n") {
 				dataCallback(null, {}, chunk, res);
 				return;
 			} else if (chunk.substr(chunk.length - 2) == "\r\n") {
-				msg.push(chunk.substr(0, chunk.length -2));
+				msg.push(chunk.substr(0, chunk.length - 2));
 				var ret = msg.join("");
 				msg = [];
-				
+
 				var parsedRet;
 				try {
 					parsedRet = JSON.parse(ret);
 				} catch (e) {
-					dataCallback({ message: "Error while parsing Twitter-Response.", error: e }, null, chunk, res);
+					dataCallback({
+						message: "Error while parsing Twitter-Response.",
+						error: e
+					}, null, chunk, res);
 					return;
 				}
 				dataCallback(null, parsedRet, ret, res);
@@ -167,13 +170,13 @@ Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecr
 	var url = type.toLowerCase();
 
 	var method = "GET";
-	switch(type) {
+	switch (type) {
 		case "retweets":
 			url = "retweets/" + params.id;
 			delete params.id;
 			break;
 		case "show":
-			url = "show/"+params.id;
+			url = "show/" + params.id;
 			delete params.id;
 			break;
 		case "lookup":
@@ -181,7 +184,7 @@ Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecr
 			method = "POST";
 			break;
 		case "destroy":
-			url = "destroy/"+params.id;
+			url = "destroy/" + params.id;
 			delete params.id;
 			method = "POST";
 			break;
@@ -189,7 +192,7 @@ Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecr
 			method = "POST";
 			break;
 		case "retweet":
-			url = "retweet/"+params.id;
+			url = "retweet/" + params.id;
 			delete params.id;
 			method = "POST";
 			break;
@@ -202,7 +205,7 @@ Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecr
 	}
 
 	if (method == "GET") {
-		this.oa.get(baseUrl + "statuses/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+		this.oa.get(baseUrl + "statuses/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 			if (error) {
 				callback(error, response, baseUrl + "statuses/" + url + ".json?" + querystring.stringify(params));
 			} else {
@@ -210,7 +213,7 @@ Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecr
 			}
 		});
 	} else {
-		this.oa.post(baseUrl + "statuses/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
+		this.oa.post(baseUrl + "statuses/" + url + ".json", accessToken, accessTokenSecret, params, function(error, data, response) {
 			if (error) {
 				callback(error, response);
 			} else {
@@ -260,7 +263,7 @@ Twitter.prototype.updateWithMedia = function(params, accessToken, accessTokenSec
 
 // Search
 Twitter.prototype.search = function(params, accessToken, accessTokenSecret, callback) {
-	this.oa.get(baseUrl + "search/tweets.json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+	this.oa.get(baseUrl + "search/tweets.json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 		if (error) {
 			callback(error, response, baseUrl + "search/tweets.json?" + querystring.stringify(params));
 		} else {
@@ -278,7 +281,7 @@ Twitter.prototype.users = function(type, params, accessToken, accessTokenSecret,
 
 
 	if (method == "GET") {
-		this.oa.get(baseUrl + "users/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+		this.oa.get(baseUrl + "users/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 			if (error) {
 				callback(error, response, baseUrl + "users/" + url + ".json?" + querystring.stringify(params));
 			} else {
@@ -286,7 +289,7 @@ Twitter.prototype.users = function(type, params, accessToken, accessTokenSecret,
 			}
 		});
 	} else {
-		this.oa.post(baseUrl + "users/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
+		this.oa.post(baseUrl + "users/" + url + ".json", accessToken, accessTokenSecret, params, function(error, data, response) {
 			if (error) {
 				callback(error, response);
 			} else {
@@ -302,7 +305,7 @@ Twitter.prototype.users = function(type, params, accessToken, accessTokenSecret,
 Twitter.prototype.friends = function(type, params, accessToken, accessTokenSecret, callback) {
 	var url = type.toLowerCase(); // ids or list
 
-	this.oa.get(baseUrl + "friends/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+	this.oa.get(baseUrl + "friends/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 		if (error) {
 			callback(error, response, baseUrl + "friends/" + url + ".json?" + querystring.stringify(params));
 		} else {
@@ -315,7 +318,7 @@ Twitter.prototype.friends = function(type, params, accessToken, accessTokenSecre
 Twitter.prototype.followers = function(type, params, accessToken, accessTokenSecret, callback) {
 	var url = type.toLowerCase(); // ids or list
 
-	this.oa.get(baseUrl + "followers/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+	this.oa.get(baseUrl + "followers/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 		if (error) {
 			callback(error, response, baseUrl + "folllowers/" + url + ".json?" + querystring.stringify(params));
 		} else {
@@ -330,7 +333,7 @@ Twitter.prototype.friendships = function(type, params, accessToken, accessTokenS
 	var method = "GET";
 
 	// define endpoints that use POST
-	switch(type) {
+	switch (type) {
 		case "create":
 		case "destroy":
 		case "update":
@@ -339,7 +342,7 @@ Twitter.prototype.friendships = function(type, params, accessToken, accessTokenS
 
 
 	if (method == "GET") {
-		this.oa.get(baseUrl + "friendships/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+		this.oa.get(baseUrl + "friendships/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 			if (error) {
 				callback(error, response, baseUrl + "friendships/" + url + ".json?" + querystring.stringify(params));
 			} else {
@@ -347,7 +350,7 @@ Twitter.prototype.friendships = function(type, params, accessToken, accessTokenS
 			}
 		});
 	} else {
-		this.oa.post(baseUrl + "friendships/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
+		this.oa.post(baseUrl + "friendships/" + url + ".json", accessToken, accessTokenSecret, params, function(error, data, response) {
 			if (error) {
 				callback(error, response);
 			} else {
@@ -394,7 +397,7 @@ Twitter.prototype.account = function(type, params, accessToken, accessTokenSecre
 	var url = type.toLowerCase();
 
 	var method = "POST";
-	switch(url) {
+	switch (url) {
 		case "settings":
 			if (Object.keys(params).length === 0) {
 				method = "GET";
@@ -409,7 +412,7 @@ Twitter.prototype.account = function(type, params, accessToken, accessTokenSecre
 	}
 
 	if (method == "GET") {
-		this.oa.get(baseUrl + "account/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+		this.oa.get(baseUrl + "account/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 			if (error) {
 				callback(error, response, baseUrl + "account/" + url + ".json?" + querystring.stringify(params));
 			} else {
@@ -417,7 +420,7 @@ Twitter.prototype.account = function(type, params, accessToken, accessTokenSecre
 			}
 		});
 	} else {
-		this.oa.post(baseUrl + "account/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
+		this.oa.post(baseUrl + "account/" + url + ".json", accessToken, accessTokenSecret, params, function(error, data, response) {
 			if (error) {
 				callback(error, response);
 			} else {
@@ -432,7 +435,7 @@ Twitter.prototype.blocks = function(type, params, accessToken, accessTokenSecret
 	var url = type.toLowerCase();
 
 	var method = "GET";
-	switch(url) {
+	switch (url) {
 		case "create":
 		case "destroy":
 			method = "POST";
@@ -440,7 +443,7 @@ Twitter.prototype.blocks = function(type, params, accessToken, accessTokenSecret
 	}
 
 	if (method == "GET") {
-		this.oa.get(baseUrl + "blocks/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+		this.oa.get(baseUrl + "blocks/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 			if (error) {
 				callback(error, response, baseUrl + "blocks/" + url + ".json?" + querystring.stringify(params));
 			} else {
@@ -448,7 +451,7 @@ Twitter.prototype.blocks = function(type, params, accessToken, accessTokenSecret
 			}
 		});
 	} else {
-		this.oa.post(baseUrl + "blocks/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
+		this.oa.post(baseUrl + "blocks/" + url + ".json", accessToken, accessTokenSecret, params, function(error, data, response) {
 			if (error) {
 				callback(error, response);
 			} else {
@@ -462,7 +465,7 @@ Twitter.prototype.blocks = function(type, params, accessToken, accessTokenSecret
 Twitter.prototype.users = function(type, params, accessToken, accessTokenSecret, callback) {
 	var url = type.toLowerCase();
 
-	this.oa.get(baseUrl + "users/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+	this.oa.get(baseUrl + "users/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 		if (error) {
 			callback(error, response, baseUrl + "users/" + url + ".json?" + querystring.stringify(params));
 		} else {
@@ -476,7 +479,7 @@ Twitter.prototype.suggestions = function(type, params, accessToken, accessTokenS
 	var url = type.toLowerCase();
 	var method = "GET";
 
-	switch(url) {
+	switch (url) {
 		case "suggestions":
 		case "":
 			url = "";
@@ -491,7 +494,7 @@ Twitter.prototype.suggestions = function(type, params, accessToken, accessTokenS
 			break;
 	}
 
-	this.oa.get(baseUrl + "users/suggestions" + ((url) ? "/" + url : "") + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+	this.oa.get(baseUrl + "users/suggestions" + ((url) ? "/" + url : "") + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 		if (error) {
 			callback(error, response, baseUrl + "users/suggestions" + ((url) ? "/" + url : "") + ".json?" + querystring.stringify(params));
 		} else {
@@ -505,14 +508,14 @@ Twitter.prototype.favorites = function(type, params, accessToken, accessTokenSec
 	var url = type.toLowerCase();
 	var method = "GET";
 
-	switch(url) {
+	switch (url) {
 		case "destroy":
 		case "create":
 			method = "POST";
 	}
 
 	if (method == "GET") {
-		this.oa.get(baseUrl + "favorites/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+		this.oa.get(baseUrl + "favorites/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 			if (error) {
 				callback(error, response, baseUrl + "favorites/" + url + ".json?" + querystring.stringify(params));
 			} else {
@@ -520,7 +523,7 @@ Twitter.prototype.favorites = function(type, params, accessToken, accessTokenSec
 			}
 		});
 	} else {
-		this.oa.post(baseUrl + "favorites/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
+		this.oa.post(baseUrl + "favorites/" + url + ".json", accessToken, accessTokenSecret, params, function(error, data, response) {
 			if (error) {
 				callback(error, response);
 			} else {
@@ -536,7 +539,7 @@ Twitter.prototype.direct_messages = function(type, params, accessToken, accessTo
 	var method = "GET";
 
 
-	switch(url) {
+	switch (url) {
 		case "direct_messages":
 		case "":
 			url = "";
@@ -547,7 +550,7 @@ Twitter.prototype.direct_messages = function(type, params, accessToken, accessTo
 	}
 
 	if (method == "GET") {
-		this.oa.get(baseUrl + "direct_messages" + ((url) ? "/" + url : "") + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+		this.oa.get(baseUrl + "direct_messages" + ((url) ? "/" + url : "") + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 			if (error) {
 				callback(error, response, baseUrl + "direct_messages" + ((url) ? "/" + url : "") + ".json?" + querystring.stringify(params));
 			} else {
@@ -555,7 +558,7 @@ Twitter.prototype.direct_messages = function(type, params, accessToken, accessTo
 			}
 		});
 	} else {
-		this.oa.post(baseUrl + "direct_messages/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
+		this.oa.post(baseUrl + "direct_messages/" + url + ".json", accessToken, accessTokenSecret, params, function(error, data, response) {
 			if (error) {
 				callback(error, response);
 			} else {
@@ -570,7 +573,7 @@ Twitter.prototype.lists = function(type, params, accessToken, accessTokenSecret,
 	var url = type.toLowerCase();
 	var method = "GET";
 
-	switch(url) {
+	switch (url) {
 		case "members/destroy":
 		case "members/destroy_all":
 		case "members/create":
@@ -584,7 +587,7 @@ Twitter.prototype.lists = function(type, params, accessToken, accessTokenSecret,
 	}
 
 	if (method == "GET") {
-		this.oa.get(baseUrl + "lists/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+		this.oa.get(baseUrl + "lists/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 			if (error) {
 				callback(error, response, baseUrl + "lists/" + url + ".json?" + querystring.stringify(params));
 			} else {
@@ -592,7 +595,7 @@ Twitter.prototype.lists = function(type, params, accessToken, accessTokenSecret,
 			}
 		});
 	} else {
-		this.oa.post(baseUrl + "lists/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
+		this.oa.post(baseUrl + "lists/" + url + ".json", accessToken, accessTokenSecret, params, function(error, data, response) {
 			if (error) {
 				callback(error, response);
 			} else {
@@ -624,7 +627,7 @@ Twitter.prototype.savedSearches = function(type, params, accessToken, accessToke
 	}
 
 	if (method == "GET") {
-		this.oa.get(baseUrl + "saved_searches/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+		this.oa.get(baseUrl + "saved_searches/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 			if (error) {
 				callback(error, response, baseUrl + "saved_searches/" + url + ".json?" + querystring.stringify(params));
 			} else {
@@ -632,7 +635,7 @@ Twitter.prototype.savedSearches = function(type, params, accessToken, accessToke
 			}
 		});
 	} else {
-		this.oa.post(baseUrl + "saved_searches/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
+		this.oa.post(baseUrl + "saved_searches/" + url + ".json", accessToken, accessTokenSecret, params, function(error, data, response) {
 			if (error) {
 				callback(error, response);
 			} else {
@@ -658,7 +661,7 @@ Twitter.prototype.geo = function(type, params, accessToken, accessTokenSecret, c
 	}
 
 	if (method == "GET") {
-		this.oa.get(baseUrl + "geo/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+		this.oa.get(baseUrl + "geo/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 			if (error) {
 				callback(error, response, baseUrl + "geo/" + url + ".json?" + querystring.stringify(params));
 			} else {
@@ -666,7 +669,7 @@ Twitter.prototype.geo = function(type, params, accessToken, accessTokenSecret, c
 			}
 		});
 	} else {
-		this.oa.post(baseUrl + "geo/" + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
+		this.oa.post(baseUrl + "geo/" + url + ".json", accessToken, accessTokenSecret, params, function(error, data, response) {
 			if (error) {
 				callback(error, response);
 			} else {
@@ -680,7 +683,7 @@ Twitter.prototype.geo = function(type, params, accessToken, accessTokenSecret, c
 Twitter.prototype.trends = function(type, params, accessToken, accessTokenSecret, callback) {
 	var url = type.toLowerCase();
 
-	this.oa.get(baseUrl + "trends/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+	this.oa.get(baseUrl + "trends/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 		if (error) {
 			callback(error, response, baseUrl + "trends/" + url + ".json?" + querystring.stringify(params));
 		} else {
@@ -693,7 +696,7 @@ Twitter.prototype.trends = function(type, params, accessToken, accessTokenSecret
 Twitter.prototype.report_spam = function(type, params, accessToken, accessTokenSecret, callback) {
 	var url = type.toLowerCase();
 
-	this.oa.post(baseUrl + "users/report_spam.json", accessToken, accessTokenSecret, params, function (error, data, response) {
+	this.oa.post(baseUrl + "users/report_spam.json", accessToken, accessTokenSecret, params, function(error, data, response) {
 		if (error) {
 			callback(error, response);
 		} else {
@@ -724,7 +727,7 @@ Twitter.prototype.oauth = function(type, params, accessToken, accessTokenSecret,
 	}
 
 	if (method == "GET") {
-		this.oa.get(baseUrl + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+		this.oa.get(baseUrl + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 			if (error) {
 				callback(error, response, baseUrl + "geo/" + url + ".json?" + querystring.stringify(params));
 			} else {
@@ -732,7 +735,7 @@ Twitter.prototype.oauth = function(type, params, accessToken, accessTokenSecret,
 			}
 		});
 	} else {
-		this.oa.post(baseUrl + url + ".json", accessToken, accessTokenSecret, params, function (error, data, response) {
+		this.oa.post(baseUrl + url + ".json", accessToken, accessTokenSecret, params, function(error, data, response) {
 			if (error) {
 				callback(error, response);
 			} else {
@@ -746,7 +749,7 @@ Twitter.prototype.oauth = function(type, params, accessToken, accessTokenSecret,
 Twitter.prototype.help = function(type, params, accessToken, accessTokenSecret, callback) {
 	var url = type.toLowerCase();
 
-	this.oa.get(baseUrl + "help/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+	this.oa.get(baseUrl + "help/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 		if (error) {
 			callback(error, response, baseUrl + "help/" + url + ".json?" + querystring.stringify(params));
 		} else {
@@ -757,7 +760,7 @@ Twitter.prototype.help = function(type, params, accessToken, accessTokenSecret, 
 
 // Rate Limit Status
 Twitter.prototype.rateLimitStatus = function(params, accessToken, accessTokenSecret, callback) {
-	this.oa.get(baseUrl + "application/rate_limit_status.json?" + querystring.stringify(params), accessToken, accessTokenSecret, function (error, data, response) {
+	this.oa.get(baseUrl + "application/rate_limit_status.json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 		if (error) {
 			callback(error, response, baseUrl + "application/rate_limit_status.json?" + querystring.stringify(params));
 		} else {
