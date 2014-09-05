@@ -46,7 +46,11 @@ Twitter.prototype.verifyCredentials = function(accessToken, accessTokenSecret, c
 		if (error) {
 			callback(error);
 		} else {
-			callback(null, JSON.parse(data));
+			try {
+				callback(null, JSON.parse(data));
+			} catch (e) {
+				callback(e, data);
+			}
 		}
 	});
 }
@@ -87,7 +91,11 @@ Twitter.prototype.getTimeline = function(type, params, accessToken, accessTokenS
 		if (error) {
 			callback(error);
 		} else {
-			callback(null, JSON.parse(data));
+			try {
+				callback(null, JSON.parse(data));
+			} catch (e) {
+				callback(e, data);
+			}
 		}
 	});
 }
@@ -209,7 +217,11 @@ Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecr
 			if (error) {
 				callback(error, response, baseUrl + "statuses/" + url + ".json?" + querystring.stringify(params));
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	} else {
@@ -217,7 +229,11 @@ Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecr
 			if (error) {
 				callback(error, response);
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	}
@@ -236,7 +252,11 @@ Twitter.prototype.updateWithMedia = function(params, accessToken, accessTokenSec
 		if (error) {
 			callback(error, response, baseUrl + "statuses/update_with_media.json?" + querystring.stringify(params));
 		} else {
-			callback(null, JSON.parse(body), response);
+			try {
+				callback(null, JSON.parse(body), response);
+			} catch (e) {
+				callback(e, body, response);
+			}
 		}
 	});
 
@@ -267,7 +287,11 @@ Twitter.prototype.search = function(params, accessToken, accessTokenSecret, call
 		if (error) {
 			callback(error, response, baseUrl + "search/tweets.json?" + querystring.stringify(params));
 		} else {
-			callback(null, JSON.parse(data), response);
+			try {
+				callback(null, JSON.parse(data), response);
+			} catch (e) {
+				callback(e, data, response);
+			}
 		}
 	});
 };
@@ -285,7 +309,11 @@ Twitter.prototype.users = function(type, params, accessToken, accessTokenSecret,
 			if (error) {
 				callback(error, response, baseUrl + "users/" + url + ".json?" + querystring.stringify(params));
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	} else {
@@ -293,7 +321,11 @@ Twitter.prototype.users = function(type, params, accessToken, accessTokenSecret,
 			if (error) {
 				callback(error, response);
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	}
@@ -309,7 +341,11 @@ Twitter.prototype.friends = function(type, params, accessToken, accessTokenSecre
 		if (error) {
 			callback(error, response, baseUrl + "friends/" + url + ".json?" + querystring.stringify(params));
 		} else {
-			callback(null, JSON.parse(data), response);
+			try {
+				callback(null, JSON.parse(data), response);
+			} catch (e) {
+				callback(e, data, response);
+			}
 		}
 	});
 };
@@ -322,7 +358,11 @@ Twitter.prototype.followers = function(type, params, accessToken, accessTokenSec
 		if (error) {
 			callback(error, response, baseUrl + "folllowers/" + url + ".json?" + querystring.stringify(params));
 		} else {
-			callback(null, JSON.parse(data), response);
+			try {
+				callback(null, JSON.parse(data), response);
+			} catch (e) {
+				callback(e, data, response);
+			}
 		}
 	});
 };
@@ -346,7 +386,11 @@ Twitter.prototype.friendships = function(type, params, accessToken, accessTokenS
 			if (error) {
 				callback(error, response, baseUrl + "friendships/" + url + ".json?" + querystring.stringify(params));
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	} else {
@@ -354,7 +398,11 @@ Twitter.prototype.friendships = function(type, params, accessToken, accessTokenS
 			if (error) {
 				callback(error, response);
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	}
@@ -376,7 +424,11 @@ Twitter.prototype.updateProfileImage = function(params, accessToken, accessToken
 		if (error) {
 			callback(error, response, baseUrl + "account/update_profile_image.json?" + querystring.stringify(params));
 		} else {
-			callback(null, JSON.parse(body), response);
+			try {
+				callback(null, JSON.parse(body), response);
+			} catch (e) {
+				callback(e, body, response);
+			}
 		}
 	});
 
@@ -416,7 +468,11 @@ Twitter.prototype.account = function(type, params, accessToken, accessTokenSecre
 			if (error) {
 				callback(error, response, baseUrl + "account/" + url + ".json?" + querystring.stringify(params));
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	} else {
@@ -424,7 +480,11 @@ Twitter.prototype.account = function(type, params, accessToken, accessTokenSecre
 			if (error) {
 				callback(error, response);
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	}
@@ -447,7 +507,11 @@ Twitter.prototype.blocks = function(type, params, accessToken, accessTokenSecret
 			if (error) {
 				callback(error, response, baseUrl + "blocks/" + url + ".json?" + querystring.stringify(params));
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	} else {
@@ -455,7 +519,11 @@ Twitter.prototype.blocks = function(type, params, accessToken, accessTokenSecret
 			if (error) {
 				callback(error, response);
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	}
@@ -469,7 +537,11 @@ Twitter.prototype.users = function(type, params, accessToken, accessTokenSecret,
 		if (error) {
 			callback(error, response, baseUrl + "users/" + url + ".json?" + querystring.stringify(params));
 		} else {
-			callback(null, JSON.parse(data), response);
+			try {
+				callback(null, JSON.parse(data), response);
+			} catch (e) {
+				callback(e, data, response);
+			}
 		}
 	});
 };
@@ -498,7 +570,11 @@ Twitter.prototype.suggestions = function(type, params, accessToken, accessTokenS
 		if (error) {
 			callback(error, response, baseUrl + "users/suggestions" + ((url) ? "/" + url : "") + ".json?" + querystring.stringify(params));
 		} else {
-			callback(null, JSON.parse(data), response);
+			try {
+				callback(null, JSON.parse(data), response);
+			} catch (e) {
+				callback(e, data, response);
+			}
 		}
 	});
 };
@@ -519,7 +595,11 @@ Twitter.prototype.favorites = function(type, params, accessToken, accessTokenSec
 			if (error) {
 				callback(error, response, baseUrl + "favorites/" + url + ".json?" + querystring.stringify(params));
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	} else {
@@ -527,7 +607,11 @@ Twitter.prototype.favorites = function(type, params, accessToken, accessTokenSec
 			if (error) {
 				callback(error, response);
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	}
@@ -554,7 +638,11 @@ Twitter.prototype.direct_messages = function(type, params, accessToken, accessTo
 			if (error) {
 				callback(error, response, baseUrl + "direct_messages" + ((url) ? "/" + url : "") + ".json?" + querystring.stringify(params));
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	} else {
@@ -562,7 +650,11 @@ Twitter.prototype.direct_messages = function(type, params, accessToken, accessTo
 			if (error) {
 				callback(error, response);
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	}
@@ -591,7 +683,11 @@ Twitter.prototype.lists = function(type, params, accessToken, accessTokenSecret,
 			if (error) {
 				callback(error, response, baseUrl + "lists/" + url + ".json?" + querystring.stringify(params));
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	} else {
@@ -599,7 +695,11 @@ Twitter.prototype.lists = function(type, params, accessToken, accessTokenSecret,
 			if (error) {
 				callback(error, response);
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	}
@@ -631,7 +731,11 @@ Twitter.prototype.savedSearches = function(type, params, accessToken, accessToke
 			if (error) {
 				callback(error, response, baseUrl + "saved_searches/" + url + ".json?" + querystring.stringify(params));
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	} else {
@@ -639,7 +743,11 @@ Twitter.prototype.savedSearches = function(type, params, accessToken, accessToke
 			if (error) {
 				callback(error, response);
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	}
@@ -665,7 +773,11 @@ Twitter.prototype.geo = function(type, params, accessToken, accessTokenSecret, c
 			if (error) {
 				callback(error, response, baseUrl + "geo/" + url + ".json?" + querystring.stringify(params));
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	} else {
@@ -673,7 +785,11 @@ Twitter.prototype.geo = function(type, params, accessToken, accessTokenSecret, c
 			if (error) {
 				callback(error, response);
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	}
@@ -687,7 +803,11 @@ Twitter.prototype.trends = function(type, params, accessToken, accessTokenSecret
 		if (error) {
 			callback(error, response, baseUrl + "trends/" + url + ".json?" + querystring.stringify(params));
 		} else {
-			callback(null, JSON.parse(data), response);
+			try {
+				callback(null, JSON.parse(data), response);
+			} catch (e) {
+				callback(e, data, response);
+			}
 		}
 	});
 };
@@ -700,7 +820,11 @@ Twitter.prototype.report_spam = function(type, params, accessToken, accessTokenS
 		if (error) {
 			callback(error, response);
 		} else {
-			callback(null, JSON.parse(data), response);
+			try {
+				callback(null, JSON.parse(data), response);
+			} catch (e) {
+				callback(e, data, response);
+			}
 		}
 	});
 };
@@ -731,7 +855,11 @@ Twitter.prototype.oauth = function(type, params, accessToken, accessTokenSecret,
 			if (error) {
 				callback(error, response, baseUrl + "geo/" + url + ".json?" + querystring.stringify(params));
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	} else {
@@ -739,7 +867,11 @@ Twitter.prototype.oauth = function(type, params, accessToken, accessTokenSecret,
 			if (error) {
 				callback(error, response);
 			} else {
-				callback(null, JSON.parse(data), response);
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
 			}
 		});
 	}
@@ -753,7 +885,11 @@ Twitter.prototype.help = function(type, params, accessToken, accessTokenSecret, 
 		if (error) {
 			callback(error, response, baseUrl + "help/" + url + ".json?" + querystring.stringify(params));
 		} else {
-			callback(null, JSON.parse(data), response);
+			try {
+				callback(null, JSON.parse(data), response);
+			} catch (e) {
+				callback(e, data, response);
+			}
 		}
 	});
 };
@@ -764,7 +900,11 @@ Twitter.prototype.rateLimitStatus = function(params, accessToken, accessTokenSec
 		if (error) {
 			callback(error, response, baseUrl + "application/rate_limit_status.json?" + querystring.stringify(params));
 		} else {
-			callback(null, JSON.parse(data), response);
+			try {
+				callback(null, JSON.parse(data), response);
+			} catch (e) {
+				callback(e, data, response);
+			}
 		}
 	});
 };
