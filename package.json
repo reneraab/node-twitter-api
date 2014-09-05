@@ -1,8 +1,8 @@
 {
 	"name": "node-twitter-api",
-	"version": "1.2.4",
+	"version": "1.3.0",
 	"description": "Simple module for using Twitter's API in node.js",
-	"keywords": ["twitter","oauth","rest","streaming"],
+	"keywords": ["twitter", "oauth", "rest", "streaming"],
 	"homepage": "https://github.com/reneraab/node-twitter-api",
 	"author": "René Raab",
 	"licenses": {
