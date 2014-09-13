@@ -529,6 +529,45 @@ Twitter.prototype.blocks = function(type, params, accessToken, accessTokenSecret
 	}
 };
 
+// Mutes
+Twitter.prototype.mutes = function(type, params, accessToken, accessTokenSecret, callback) {
+	var url = type.toLowerCase();
+
+	var method = "GET";
+	switch (url) {
+		case "users/create":
+		case "users/destroy":
+			method = "POST";
+			break;
+	}
+
+	if (method == "GET") {
+		this.oa.get(baseUrl + "mutes/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
+			if (error) {
+			callback(error, data, response, baseUrl + "mutes/" + url + ".json?" + querystring.stringify(params));
+			} else {
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
+			}
+		});
+	} else {
+		this.oa.post(baseUrl + "mutes/" + url + ".json", accessToken, accessTokenSecret, params, function(error, data, response) {
+			if (error) {
+				callback(error, data, response);
+			} else {
+				try {
+					callback(null, JSON.parse(data), response);
+				} catch (e) {
+					callback(e, data, response);
+				}
+			}
+		});
+	}
+};
+
 // Users
 Twitter.prototype.users = function(type, params, accessToken, accessTokenSecret, callback) {
 	var url = type.toLowerCase();
