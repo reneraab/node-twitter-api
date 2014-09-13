@@ -535,16 +535,16 @@ Twitter.prototype.mutes = function(type, params, accessToken, accessTokenSecret,
 
 	var method = "GET";
 	switch (url) {
-		case "create":
-		case "destroy":
+		case "users/create":
+		case "users/destroy":
 			method = "POST";
 			break;
 	}
 
 	if (method == "GET") {
-		this.oa.get(baseUrl + "mutes/users/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
+		this.oa.get(baseUrl + "mutes/" + url + ".json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
 			if (error) {
-			callback(error, data, response, baseUrl + "mutes/users/" + url + ".json?" + querystring.stringify(params));
+			callback(error, data, response, baseUrl + "mutes/" + url + ".json?" + querystring.stringify(params));
 			} else {
 				try {
 					callback(null, JSON.parse(data), response);
@@ -554,7 +554,7 @@ Twitter.prototype.mutes = function(type, params, accessToken, accessTokenSecret,
 			}
 		});
 	} else {
-		this.oa.post(baseUrl + "mutes/users/" + url + ".json", accessToken, accessTokenSecret, params, function(error, data, response) {
+		this.oa.post(baseUrl + "mutes/" + url + ".json", accessToken, accessTokenSecret, params, function(error, data, response) {
 			if (error) {
 				callback(error, data, response);
 			} else {
