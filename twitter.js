@@ -5,6 +5,7 @@ var VERSION = "1.4.0",
 	fs = require("fs");
 
 var baseUrl = "https://api.twitter.com/1.1/";
+var authUrl = "https://twitter.com/oauth/authenticate?oauth_token=";
 
 var Twitter = function(options) {
 	if (!(this instanceof Twitter))
@@ -29,6 +30,10 @@ Twitter.prototype.getRequestToken = function(callback) {
 			callback(null, oauthToken, oauthTokenSecret, results);
 		}
 	});
+}
+
+Twitter.prototype.getAuthUrl = function(requestToken) {
+	return authUrl + requestToken;
 }
 
 Twitter.prototype.getAccessToken = function(requestToken, requestTokenSecret, oauth_verifier, callback) {
