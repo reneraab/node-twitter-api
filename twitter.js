@@ -165,7 +165,7 @@ Twitter.prototype.getStream = function(type, params, accessToken, accessTokenSec
 			}
 		});
 		res.addListener("end", function() {
-			endCallback();
+			endCallback(res);
 		});
 	});
 	req.end();
