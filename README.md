@@ -89,7 +89,14 @@ Most of the functions use the scheme:
 * _accessToken_ and _accessTokenSecret_ are the token and secret of the authenticated user
 * _callback_ is a function with the parameters _error_ (either null or an error object), _data_ (data object) and _response_ (unprocessed response from Twitter)
 
-For Timelines you can also use the function _getTimeline_ instead of _statuses_ and use shorter types ("user" instead of "user_timeline").
+For Timelines you can also use the function _getTimeline_ which has the following types:
+* `user` or `user_timeline` (Note that you need to either specify user_id or screen_name when using this timeline)
+* `home` or `home_timeline`
+* `mentions` or `mentions_timeline`
+* `retweets` or `retweets_of_me`
+
+For more information on the different types of timelines see https://dev.twitter.com/rest/reference/get/statuses/home_timeline (analog for the other types)
+
 For Streams you must use _getStream_ which has two instead of just one callback: a dataCallback and an endCallback. (c.f. data and end events of node's http response)
 
 ## Use of update_with_media ##
