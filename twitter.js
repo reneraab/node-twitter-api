@@ -131,7 +131,8 @@ Twitter.prototype.getStream = function(type, params, accessToken, accessTokenSec
 			url = "https://stream.twitter.com/1.1/statuses/filter.json";
 			break;
 		default:
-			callback("Please specify an existing type.");
+			var errorMessage = "Please specify an existing type.";
+			dataCallback({message: errorMessage, e: new Error(errorMessage)}, null, null, null);
 			return false;
 	}
 
