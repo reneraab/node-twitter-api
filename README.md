@@ -99,18 +99,9 @@ For more information on the different types of timelines see https://dev.twitter
 
 For Streams you must use _getStream_ which has two instead of just one callback: a dataCallback and an endCallback. (c.f. data and end events of node's http response)
 
-## Use of update_with_media ##
-(works similar for update_profile_image)
-To send media alongside a tweet you just call the method as specified before. Please note, that you have to specify the parameters slightly different than proposed by the Twitter API documentation:
-```javascript
-{
-	media: [
-		"path_to_file1",
-		"path_to_file2",
-		stream
-	],
-	status: "Hello World"
-},
-```
-Instead of specifing "media[]", you use a real array. The given paths will then be read and posted to the Twitter API. You can also use a Readable Stream (http://nodejs.org/api/fs.html#fs_fs_createreadstream_path_options) instead of a Path.
-Please note that Twitter only allows one image at the moment (the last one specified will be used).
+## How to upload media ##
+To upload media to Twitter, call `twitter.uploadMedia(params, accessToken, accessTokenSecret, callback)` with params containing the following:
+* _media_: Either the raw binary content of the image, the binary base64 encoded (see isBase64 below) or the path to the file containing the image.
+* _isBase64_: Set to true, if media contains base64 encoded data
+
+For a example result see https://dev.twitter.com/rest/reference/post/media/upload. You can pass multiple media_ids to the statuses/update endpoint by seperating them with commas (e.g. "[id1],[id2],[id3],[id4]").

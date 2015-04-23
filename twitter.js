@@ -6,6 +6,7 @@ var VERSION = "1.5.0",
 	fs = require("fs");
 
 var baseUrl = "https://api.twitter.com/1.1/";
+var uploadBaseUrl = "https://upload.twitter.com/1.1/";
 var authUrl = "https://twitter.com/oauth/authenticate?oauth_token=";
 
 var Twitter = function(options) {
@@ -246,9 +247,9 @@ Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecr
 	}
 };
 
-Twitter.prototype.updateWithMedia = function(params, accessToken, accessTokenSecret, callback) {
+Twitter.prototype.uploadMedia = function(params, accessToken, accessTokenSecret, callback) {
 	var r = request.post({
-		url: baseUrl + "statuses/update_with_media.json",
+		url: uploadBaseUrl + "media/upload.json",
 		oauth: {
 			consumer_key: this.consumerKey,
 			consumer_secret: this.consumerSecret,
@@ -257,7 +258,7 @@ Twitter.prototype.updateWithMedia = function(params, accessToken, accessTokenSec
 		}
 	}, function(error, response, body) {
 		if (error) {
-			callback(error, body, response, baseUrl + "statuses/update_with_media.json?" + querystring.stringify(params));
+			callback(error, body, response, uploadBaseUrl + "media/upload.json?" + querystring.stringify(params));
 		} else {
 			try {
 				callback(null, JSON.parse(body), response);
@@ -267,26 +268,16 @@ Twitter.prototype.updateWithMedia = function(params, accessToken, accessTokenSec
 		}
 	});
 
+	var parameter = (params.isBase64) ? "media_data" : "media";
+
 	// multipart/form-data
 	var form = r.form();
-	for (var key in params) {
-		if (key != "media") {
-			form.append(key, params[key]);
-		}
-	}
-
-	// append the media array
-	var media = params["media"];
-	for (var i = 0; i < media.length; i++) {
-		// if the content of media[i] is an existing path, create a ReadStream, otherwise just append the content
-		if (fs.existsSync(media[i])) {
-			form.append("media[]", fs.createReadStream(media[i]));
-		} else {
-			form.append("media[]", media[i]);
-		}
+	if (fs.existsSync(params.media)) {
+		form.append(parameter, fs.createReadStream(params.media));
+	} else {
+		form.append(parameter, params.media);
 	}
 };
-
 
 // Search
 Twitter.prototype.search = function(params, accessToken, accessTokenSecret, callback) {
