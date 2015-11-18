@@ -220,7 +220,7 @@ Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecr
 			this.uploadMedia(params, accessToken, accessTokenSecret, callback);
 			return;
 		case "update_with_media":
-			callback("Upload with media type is deprecated. Use 'upload_media' instead");
+			callback("'update_with_media' type has been removed. Use 'upload_media' instead");
 			return false;
 		default:
 			callback("Please specify an existing type.");
