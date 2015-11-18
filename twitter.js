@@ -216,9 +216,12 @@ Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecr
 			delete params.id;
 			method = "POST";
 			break;
-		case "update_with_media":
-			this.updateWithMedia(params, accessToken, accessTokenSecret, callback);
+		case "upload_media":
+			this.uploadMedia(params, accessToken, accessTokenSecret, callback);
 			return;
+		case "update_with_media":
+			callback("'update_with_media' type has been removed. Use 'upload_media' instead");
+			return false;
 		default:
 			callback("Please specify an existing type.");
 			return false;
