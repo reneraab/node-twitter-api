@@ -20,6 +20,8 @@ var twitter = new twitterAPI({
 	callback: 'http://yoururl.tld/something'
 });
 ```
+
+Optionally you can add `x_auth_access_type: "read"` or `x_auth_access_type: "write"` (see: https://dev.twitter.com/oauth/reference/post/oauth/request_token).
 ### Step 2: Getting a request token ###
 ```javascript
 twitter.getRequestToken(function(error, requestToken, requestTokenSecret, results){

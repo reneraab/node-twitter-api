@@ -17,6 +17,8 @@ var Twitter = function(options) {
 	this.consumerSecret = options.consumerSecret;
 	this.callback = options.callback;
 
+	this.x_auth_access_type = options.x_auth_access_type;
+
 	this.oa = new oauth.OAuth("https://twitter.com/oauth/request_token", "https://twitter.com/oauth/access_token",
 		this.consumerKey, this.consumerSecret, "1.0A", this.callback, "HMAC-SHA1");
 
@@ -25,7 +27,7 @@ var Twitter = function(options) {
 Twitter.VERSION = VERSION;
 
 Twitter.prototype.getRequestToken = function(callback) {
-	this.oa.getOAuthRequestToken(function(error, oauthToken, oauthTokenSecret, results) {
+	this.oa.getOAuthRequestToken({x_auth_access_type: this.x_auth_access_type}, function(error, oauthToken, oauthTokenSecret, results) {
 		if (error) {
 			callback(error);
 		} else {
