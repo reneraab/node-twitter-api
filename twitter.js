@@ -107,7 +107,7 @@ Twitter.prototype.getTimeline = function(type, params, accessToken, accessTokenS
             try {
                 callback(null, JSON.parse(data), response);
             } catch (e) {
-                callback(e, data);
+                callback(e, data, response);
             }
         }
     });
