@@ -62,7 +62,7 @@ Twitter.prototype.verifyCredentials = function(accessToken, accessTokenSecret, c
 			try {
 				callback(null, JSON.parse(data));
 			} catch (e) {
-				callback(e, data);
+				callback(e, data, response);
 			}
 		}
 	});
@@ -107,7 +107,7 @@ Twitter.prototype.getTimeline = function(type, params, accessToken, accessTokenS
 			try {
 				callback(null, JSON.parse(data));
 			} catch (e) {
-				callback(e, data);
+				callback(e, data, response);
 			}
 		}
 	});
