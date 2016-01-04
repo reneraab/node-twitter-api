@@ -218,6 +218,9 @@ Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecr
 			delete params.id;
 			method = "POST";
 			break;
+		case "oembed":
+			url ="oembed";
+			break;
 		case "upload_media":
 			this.uploadMedia(params, accessToken, accessTokenSecret, callback);
 			return;
