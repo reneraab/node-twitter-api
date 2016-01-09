@@ -51,7 +51,7 @@ If no error occured, you now have an `accessToken` and an `accessTokenSecret`. Y
 
 ### Step 4: (Optional) Verify Credentials ###
 ```javascript
-twitter.verifyCredentials(accessToken, accessTokenSecret, function(error, data, response) {
+twitter.verifyCredentials(accessToken, accessTokenSecret, params, function(error, data, response) {
 	if (error) {
 		//something was wrong with either accessToken or accessTokenSecret
 		//start over with Step 1
@@ -63,6 +63,7 @@ twitter.verifyCredentials(accessToken, accessTokenSecret, function(error, data, 
 	}
 });
 ```
+In the above example, `params` is an optional object containing extra parameters to be sent to the Twitter endpoint (see https://dev.twitter.com/rest/reference/get/account/verify_credentials)
 
 ## Methods ##
 (Allmost) all function names replicate the endpoints of the Twitter API 1.1.
