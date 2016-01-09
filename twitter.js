@@ -1,5 +1,5 @@
 "use strict";
-var VERSION = "1.6.5",
+var VERSION = "1.7.0",
 	querystring = require("querystring"),
 	oauth = require("oauth"),
 	request = require("request"),
