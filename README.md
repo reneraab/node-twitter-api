@@ -106,5 +106,10 @@ For Streams you must use _getStream_ which has two instead of just one callback:
 To upload media to Twitter, call `twitter.uploadMedia(params, accessToken, accessTokenSecret, callback)` with params containing the following:
 * _media_: Either the raw binary content of the image, the binary base64 encoded (see isBase64 below) or the path to the file containing the image.
 * _isBase64_: Set to true, if media contains base64 encoded data
-
 For a example result see https://dev.twitter.com/rest/reference/post/media/upload. You can pass multiple media_ids to the statuses/update endpoint by seperating them with commas (e.g. "[id1],[id2],[id3],[id4]").
+
+## How to upload Video ##
+To upload video to Twitter, call `twitter.uploadVideo(params, accessToken, accessTokenSecret, callback)` with params containing the following:
+* _media_: Path to the file containing the image.
+
+You can pass media_id to the statuses/update endpoint and video will be uploaded to twitter. Please note that video should be less than 15mb or 30 sec in length
