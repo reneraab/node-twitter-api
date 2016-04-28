@@ -110,6 +110,6 @@ For a example result see https://dev.twitter.com/rest/reference/post/media/uploa
 
 ## How to upload Video ##
 To upload video to Twitter, call `twitter.uploadVideo(params, accessToken, accessTokenSecret, callback)` with params containing the following:
-* _media_: Path to the file containing the image.
+* _media_: Path to the file containing the video.
 
-You can pass media_id to the statuses/update endpoint and video will be uploaded to twitter. Please note that video should be less than 15mb or 30 sec in length
+You can pass media_id to the statuses/update endpoint and video will be uploaded to twitter. Please note that video should be less than 15mb or 30 sec in length.

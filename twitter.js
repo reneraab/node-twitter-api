@@ -294,7 +294,7 @@ Twitter.prototype.uploadMedia = function(params, accessToken, accessTokenSecret,
 };
 
 /**
- * upload video for twitter
+ * upload video to twitter
  * @param params
  * @param accessToken
  * @param accessTokenSecret
