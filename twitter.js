@@ -293,6 +293,90 @@ Twitter.prototype.uploadMedia = function(params, accessToken, accessTokenSecret,
 	}
 };
 
+/**
+ * upload video to twitter
+ * @param params
+ * @param accessToken
+ * @param accessTokenSecret
+ * @param callback
+ */
+Twitter.prototype.uploadVideo = function (params, accessToken, accessTokenSecret, callback) {
+	var bufferLength = 1000000;
+	var theBuffer = new Buffer(bufferLength);
+	var offset = 0;
+	var segment_index = 0;
+	var finished = 0;
+	var oauthObj = {
+		consumer_key: this.consumerKey,
+		consumer_secret: this.consumerSecret,
+		token: accessToken,
+		token_secret: accessTokenSecret
+	};
+
+	fs.stat(params.media, function (err, stats) {
+		var formData, finalizeVideo, options;
+		formData = {
+			command: "INIT",
+			media_type: 'video/mp4',
+			total_bytes: stats.size
+		};
+		options = {
+			url: uploadBaseUrl + "media/upload.json",
+			oauth: oauthObj,
+			formData: formData
+		};
+
+		finalizeVideo = function (media_id) {
+			return function (err, response, body) {
+
+				finished++;
+				if (finished === segment_index) {
+
+					options.formData = {
+						command: 'FINALIZE',
+						media_id: media_id
+					};
+					request.post(options, function (err, response, body) {
+						if (err) {
+							return cb(err, body);
+						} else {
+							try {
+								return callback(null, JSON.parse(body));
+							} catch (e) {
+								return callback(e, body);
+							}
+						}
+					});
+				}
+			};
+		};
+		request.post(options, function (err, response, body) {
+			var media_id;
+			media_id = JSON.parse(body).media_id_string;
+			fs.open(params.media, 'r', function (err, fd) {
+				var bytesRead, data;
+
+				while (offset < stats.size) {
+
+					bytesRead = fs.readSync(fd, theBuffer, 0, bufferLength, null);
+					data = bytesRead < bufferLength ? theBuffer.slice(0, bytesRead) : theBuffer;
+					options.formData = {
+						command: "APPEND",
+						media_id: media_id,
+						segment_index: segment_index,
+						media_data: data.toString('base64')
+					};
+					request.post(options, finalizeVideo(media_id));
+					offset += bufferLength;
+					segment_index++
+				}
+			});
+		});
+	});
+};
+
+
+
 // Search
 Twitter.prototype.search = function(params, accessToken, accessTokenSecret, callback) {
 	this.oa.get(baseUrl + "search/tweets.json?" + querystring.stringify(params), accessToken, accessTokenSecret, function(error, data, response) {
