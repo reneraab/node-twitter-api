@@ -1,6 +1,6 @@
 {
 	"name": "node-twitter-api",
-	"version": "1.7.3",
+	"version": "1.7.4",
 	"description": "Simple module for using Twitter's API in node.js",
 	"keywords": ["twitter", "oauth", "rest", "streaming"],
 	"homepage": "https://github.com/reneraab/node-twitter-api",
