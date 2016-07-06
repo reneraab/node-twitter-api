@@ -66,7 +66,7 @@ Twitter.prototype.verifyCredentials = function(accessToken, accessTokenSecret, p
 			} catch (e) {
 				callback(e, data, response);
 			}
-			callback(null, parsedData);
+			callback(null, parsedData, response);
 		}
 	});
 };
