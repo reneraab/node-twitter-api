@@ -306,6 +306,10 @@ Twitter.prototype.uploadMedia = function(params, accessToken, accessTokenSecret,
  * @param callback
  */
 Twitter.prototype.uploadVideo = function (params, accessToken, accessTokenSecret, callback) {
+	this.uploadMediaChunked(params, "video/mp4", accessToken, accessTokenSecret, callback);
+};
+
+Twitter.prototype.uploadMediaChunked = function (params, media_type, accessToken, accessTokenSecret, callback) {
 	var bufferLength = 1000000;
 	var theBuffer = new Buffer(bufferLength);
 	var offset = 0;
@@ -319,10 +323,10 @@ Twitter.prototype.uploadVideo = function (params, accessToken, accessTokenSecret
 	};
 
 	fs.stat(params.media, function (err, stats) {
-		var formData, finalizeVideo, options;
+		var formData, finalizeMedia, options;
 		formData = {
 			command: "INIT",
-			media_type: 'video/mp4',
+			media_type: media_type,
 			total_bytes: stats.size
 		};
 		options = {
@@ -331,7 +335,7 @@ Twitter.prototype.uploadVideo = function (params, accessToken, accessTokenSecret
 			formData: formData
 		};
 
-		finalizeVideo = function (media_id) {
+		finalizeMedia = function (media_id) {
 			return function (err, response, body) {
 
 				finished++;
@@ -372,7 +376,7 @@ Twitter.prototype.uploadVideo = function (params, accessToken, accessTokenSecret
 						segment_index: segment_index,
 						media_data: data.toString('base64')
 					};
-					request.post(options, finalizeVideo(media_id));
+					request.post(options, finalizeMedia(media_id));
 					offset += bufferLength;
 					segment_index++
 				}
