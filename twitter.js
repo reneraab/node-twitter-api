@@ -222,6 +222,11 @@ Twitter.prototype.statuses = function(type, params, accessToken, accessTokenSecr
 			delete params.id;
 			method = "POST";
 			break;
+		case "unretweet":
+			url = "unretweet/" + params.id;
+			delete params.id;
+			method = "POST";
+			break;
 		case "oembed":
 			url ="oembed";
 			break;
