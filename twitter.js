@@ -37,13 +37,13 @@ Twitter.prototype.getRequestToken = function(callback) {
 };
 
 Twitter.prototype.getAuthUrl = function(requestToken, options) {
-  var extraArgs = '';
-  if (options.force_login) {
-    extraArgs += '&force_login=1';
-  }
-  if (options.screen_name) {
-    extraArgs += '&screen_name=' + options.screen_name;
-  }
+	var extraArgs = "";
+	if (options && options.force_login) {
+		extraArgs += "&force_login=1";
+	}
+	if (options && options.screen_name) {
+		extraArgs += "&screen_name=" + options.screen_name;
+	}
 	return authUrl + requestToken + extraArgs;
 };
 
