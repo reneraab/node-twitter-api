@@ -1,5 +1,8 @@
-# node-twitter #
+# NO LONGER ACTIVELY MAINTAINED #
+Due to a lack of motivation/interest regarding node.js and the Twitter API, I am no longer actively maintaining this project. I feel like I can't provide the time/testing/code necessary to incorporate the pull requests or new changes to the Twitter API. The project and the source code will remain here on GitHub and on npm but there will no longer be any changes from my side.
 
+
+# node-twitter-api #
 
 Simple module for using Twitter's API in node.js
 
