@@ -20,7 +20,8 @@ var Twitter = function(options) {
 	this.x_auth_access_type = options.x_auth_access_type;
 
 	this.oa = new oauth.OAuth("https://twitter.com/oauth/request_token", "https://twitter.com/oauth/access_token",
-		this.consumerKey, this.consumerSecret, "1.0A", this.callback, "HMAC-SHA1");
+		this.consumerKey, this.consumerSecret, "1.0A", this.callback, "HMAC-SHA1",
+		undefined, { 'Connection': 'Keep-Alive' });
 
 	return this;
 };
