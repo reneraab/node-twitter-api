@@ -69,7 +69,7 @@ twitter.verifyCredentials(accessToken, accessTokenSecret, params, function(error
 In the above example, `params` is an optional object containing extra parameters to be sent to the Twitter endpoint (see https://dev.twitter.com/rest/reference/get/account/verify_credentials)
 
 ## Methods ##
-(Allmost) all function names replicate the endpoints of the Twitter API 1.1.
+(Almost) all function names replicate the endpoints of the Twitter API 1.1.
 If you want to post a status e. g. - which is done by posting data to statuses/update - you can just do the following:
 ```javascript
 twitter.statuses("update", {
